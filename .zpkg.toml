@@ -1,0 +1,28 @@
+[package]
+org = "embedded-alerts"
+name = "eal-sidecar"
+version = "0.1.0"
+description = "k8s sidecar for Embedded Alerts."
+license = "MIT"
+keywords = ["sidecar", "observability", "k8s"]
+language = "rust"
+
+[package.repository]
+vcs = "git"
+url = "https://github.com/embedded-alerts/eal-sidecar.rs"
+
+[dependencies]
+"ores-otel/ores-otel-sidecar" = "^0.1.0"
+
+[build]
+command = "cargo build --release --locked --bin eal-sidecar"
+outputs = ["target/release/eal-sidecar"]
+
+[bin]
+eal-sidecar = "target/release/eal-sidecar"
+
+[install]
+adapter = "none"
+
+[scripts]
+test = "cargo test --all-targets --locked"
