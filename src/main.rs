@@ -15,7 +15,12 @@ fn main() {
         false,
     ) {
         Ok(cfg) => cfg,
-        Err(_) => SidecarConfig::from_env(SidecarIdentity::new(env::SERVICE, env::BIND)),
+        Err(_) => {
+            // Invalid operator configuration must never silently select a
+            // different listener address, especially a wider network bind.
+            eprintln!("invalid EAL_SIDECAR_BIND: expected a valid socket address");
+            std::process::exit(2);
+        }
     };
     runtime::run(&cfg);
 }
