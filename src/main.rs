@@ -1,8 +1,10 @@
 #![forbid(unsafe_code)]
 
 #[path = "../generated/rust/env.rs"]
+#[rustfmt::skip]
 mod env;
 #[path = "../generated/rust/runtime.rs"]
+#[rustfmt::skip]
 mod env_runtime;
 
 use ores_otel_sidecar::{runtime, SidecarConfig, SidecarIdentity};
