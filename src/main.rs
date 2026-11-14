@@ -1,8 +1,10 @@
 #![forbid(unsafe_code)]
 
 #[path = "../generated/rust/env.rs"]
+#[rustfmt::skip]
 mod env;
 #[path = "../generated/rust/runtime.rs"]
+#[rustfmt::skip]
 mod env_runtime;
 
 use ores_otel_sidecar::{runtime, SidecarConfig, SidecarIdentity};
@@ -15,7 +17,12 @@ fn main() {
         false,
     ) {
         Ok(cfg) => cfg,
-        Err(_) => SidecarConfig::from_env(SidecarIdentity::new(env::SERVICE, env::BIND)),
+        Err(_) => {
+            // Invalid operator configuration must never silently select a
+            // different listener address, especially a wider network bind.
+            eprintln!("invalid EAL_SIDECAR_BIND: expected a valid socket address");
+            std::process::exit(2);
+        }
     };
     runtime::run(&cfg);
 }
